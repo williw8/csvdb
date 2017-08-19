@@ -1,2 +1,2 @@
 # csvdb
-Python library to manipulate comma separated value (CSV) files
+Python library to manipulate comma separated value (CSV) files.
