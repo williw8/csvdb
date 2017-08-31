@@ -15,13 +15,16 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-class UnknownLabel(Exception):
+class TableException(Exception):
   pass
 
-class InvalidRow(Exception):
+class UnknownLabel(TableException):
   pass
 
-class InvalidRowIndex(Exception):
+class InvalidRow(TableException):
+  pass
+
+class InvalidRowIndex(TableException):
   pass
 
 class CSVTable:
