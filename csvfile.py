@@ -57,7 +57,7 @@ class SingleFileReader(object):
 
   def load(self):
     rv = csvdb.CSVTable()
-    rv.set_store(self)
+    rv.setStore(self)
     try: 
       self.file = open(self.path,'rb')
       while True:
@@ -69,7 +69,7 @@ class SingleFileReader(object):
         # parts = line.split(self.delimiter)
         parts = self.delimit(line)
         for part in parts:
-          rv.add_header_label(part.strip())
+          rv.addHeaderLabel(part.strip())
         break
     except IOError as ioe:
       self.error = 'IOError: ' +  os.strerror(ioe.errno)
@@ -93,7 +93,7 @@ class SingleFileReader(object):
           else:
             fout.write(self.delimiter)
           idx += 1
-        for row in table.get_iter():
+        for row in table.getIter():
             idx = 0
             for v in row:
               if len(v) > 0:
@@ -121,7 +121,7 @@ class SingleFileReader(object):
         values.append(part.strip())
       yield values 
 
-  def next_row(self):
+  def nextRow(self):
     rv = None
     while True:
       line = self.file.readline()

@@ -34,7 +34,7 @@ class CSVTable:
     self.store = None
     self.indices = dict()
 
-  def add_header_label(self,v):
+  def addHeaderLabel(self,v):
     self.header.append(v)
     idx = 0
     self.indices = dict()
@@ -42,39 +42,39 @@ class CSVTable:
       self.indices[x] = idx
       idx += 1
    
-  def get_header(self):
+  def getHeader(self):
     return self.header
 
-  def set_store(self,v):
+  def setStore(self,v):
     self.store = v
 
-  def get_store(self):
+  def getStore(self):
     return self.store
 
   def close(self):
     if None is not self.store:
       self.store.close() 
 
-  def get_iter(self):
+  def getIter(self):
     return self.store
 
-  def next_row(self):
-    return self.store.next_row()
+  def nextRow(self):
+    return self.store.nextRow()
 
   def reset(self):
     if None is not self.store:
       self.store.close()
     return self.store.load()
 
-  def get_header_index(self,label):
+  def getHeaderIndex(self,label):
     rv = -1
     if self.indices.has_key(label):
       rv = self.indices[label]
     return rv
 
-  def get_value_from_row(self,label,row):
+  def getValueFromRow(self,label,row):
     rv = ''
-    idx = self.get_header_index(label)
+    idx = self.getHeaderIndex(label)
     if idx >= 0:
       if idx < len(row):
         try:
@@ -90,7 +90,7 @@ class CSVTable:
   # FIXME: Make this a whatchmacallit that iterates one row at a time... 
   def select(self,columns,where_column,where_value):
     '''
-        "columns" is either a single string, or a list of strings
+        "columns" is either a single string, or a list of strings representing the columns to select for output.
         set "columns" = "*" to select all columns
         set "where_value" = "*" to select all rows. In this case 
           "where_column" doesn't matter
@@ -103,17 +103,17 @@ class CSVTable:
 
     if '*' == columns[0]:
       for c in table.header:
-        column_indices.append(self.get_header_index(c))
+        column_indices.append(self.getHeaderIndex(c))
     else:
       for c in columns:
         if c not in table.header:
           raise UnknownLabel(c)
-        column_indices.append(self.get_header_index(c))
+        column_indices.append(self.getHeaderIndex(c))
     if ('*' != where_value) and (where_column not in table.header):
       raise UnknownLabel(where_column)
     if '*' != where_column:
-      where_column_index = self.get_header_index(where_column)
-    for row in table.get_iter():
+      where_column_index = self.getHeaderIndex(where_column)
+    for row in table.getIter():
       append = False
       if '*' == where_value:
         append = True
@@ -123,11 +123,11 @@ class CSVTable:
       if append:
         v = list()
         if '*' == columns[0]:
-          v.append(row[i])
+          rv.append(row)
         else:
           for i in column_indices:
             v.append(row[i])
-        rv.append(v)
+          rv.append(v)
     return rv
 
   def makeSingleSelectionDistinct(self,selection_list):

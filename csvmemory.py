@@ -31,7 +31,7 @@ class MemoryWriter(object):
   def load(self,path):
     self.path = path
     rv = csvdb.CSVTable()
-    rv.set_store(self)
+    rv.setStore(self)
     return rv
 
   def save(self,path):
