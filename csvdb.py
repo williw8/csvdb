@@ -162,11 +162,11 @@ class SelectExpression(object):
       if LT == op:
         result = left < right
       elif LTEQ == op:
-        result = value <= self.where_value
+        result = left <= right 
       elif GT == op:
-        result = value > self.where_value
+        result = left > right 
       elif GTEQ == op:
-        result = value >= self.where_value
+        result = left >= right 
       else:
         is_int = False
       rv = (is_int,result)
@@ -191,11 +191,11 @@ class SelectExpression(object):
       if LT == op:
         result = left < right
       elif LTEQ == op:
-        result = value <= self.where_value
+        result = left <= right 
       elif GT == op:
-        result = value > self.where_value
+        result = left > right
       elif GTEQ == op:
-        result = value >= self.where_value
+        result = left >= right 
       else:
         is_float = False
       rv = (is_float,result)
@@ -209,6 +209,7 @@ class SelectExpression(object):
     Returns a tuple of True/False values:
     (<is a numeric value>,<match value>)
     '''
+
     (is_numeric,result) = self.checkIntegerMatch(value,op)
     if False == is_numeric:
       (is_numeric,result) = self.checkFloatMatch(value,op)
