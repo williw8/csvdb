@@ -146,23 +146,94 @@ class SelectExpression(object):
   def getText(self):
     return self.text
 
+  def checkIntegerMatch(self,value,op):
+    '''
+    Returns a tuple of True/False values:
+    (<is an integer>,<match value>)
+    '''
+
+    rv = (False,False)
+    left = None
+    right = None
+    try:
+      is_int = True
+      left = int(value)
+      right = int(self.where_value)
+      if LT == op:
+        result = left < right
+      elif LTEQ == op:
+        result = value <= self.where_value
+      elif GT == op:
+        result = value > self.where_value
+      elif GTEQ == op:
+        result = value >= self.where_value
+      else:
+        is_int = False
+      rv = (is_int,result)
+    except ValueError as ex:
+      # Not an integer, return (False,False)
+      pass
+    return rv
+
+  def checkFloatMatch(self,value,op):
+    '''
+    Returns a tuple of True/False values:
+    (<is a float value>,<match value>)
+    '''
+    rv = (False,False)
+    left = None
+    right = None
+    try:
+      is_float = True 
+      result = None
+      left = float(value)
+      right = float(self.where_value)
+      if LT == op:
+        result = left < right
+      elif LTEQ == op:
+        result = value <= self.where_value
+      elif GT == op:
+        result = value > self.where_value
+      elif GTEQ == op:
+        result = value >= self.where_value
+      else:
+        is_float = False
+      rv = (is_float,result)
+    except ValueError as ex:
+      # Not a float value, return (False,False)
+      pass
+    return rv
+
+  def checkNumericMatch(self,value,op):
+    '''
+    Returns a tuple of True/False values:
+    (<is a numeric value>,<match value>)
+    '''
+    (is_numeric,result) = self.checkIntegerMatch(value,op)
+    if False == is_numeric:
+      (is_numeric,result) = self.checkFloatMatch(value,op)
+    return (is_numeric,result)
+
   def checkMatch(self,value):
     rv = False
     if EQ == self.operator:
       if value == self.where_value:
         rv = True
-    elif LT == self.operator:
-      if value < self.where_value:
-        rv = True
-    elif LTEQ == self.operator:
-      if value <= self.where_value:
-        rv = True
-    elif GT == self.operator:
-      if value > self.where_value:
-        rv = True
-    elif GTEQ == self.operator:
-      if value >= self.where_value:
-        rv = True
+    else:
+      (is_numeric,rv) = self.checkNumericMatch(value,self.operator)
+      if False == is_numeric:  
+        if LT == self.operator:
+          if value < self.where_value:
+            rv = True
+        elif LTEQ == self.operator:
+          if value <= self.where_value:
+            rv = True
+        elif GT == self.operator:
+          if value > self.where_value:
+            rv = True
+        elif GTEQ == self.operator:
+          if value >= self.where_value:
+            rv = True
     return rv 
 
 
