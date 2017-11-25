@@ -79,30 +79,31 @@ class SelectExpression(object):
       self.where_offset = text.find(WHERE_STR_L)
       self.where_name_offset = self.where_offset + len(WHERE_STR_L)
 
-    if EQ in text:
-      self.operator = EQ
-      self.operator_offset = text.find(EQ)
-      self.where_value_offset = self.operator_offset + len(EQ)
+    # Order is important in this list of comparisons, don't change it on a whim
+    if LTEQ in text:
+      self.operator = LTEQ
+      self.operator_offset = text.find(LTEQ)
+      self.where_value_offset = self.operator_offset + len(LTEQ)
+      self.where_value = text[self.where_value_offset:].strip()
+    elif GTEQ in text:
+      self.operator = GTEQ
+      self.operator_offset = text.find(GTEQ)
+      self.where_value_offset = self.operator_offset + len(GTEQ)
       self.where_value = text[self.where_value_offset:].strip()
     elif LT in text:
       self.operator = LT
       self.operator_offset = text.find(LT)
       self.where_value_offset = self.operator_offset + len(LT)
       self.where_value = text[self.where_value_offset:].strip()
-    elif LTEQ in text:
-      self.operator = LTEQ
-      self.operator_offset = text.find(LTEQ)
-      self.where_value_offset = self.operator_offset + len(LTEQ)
-      self.where_value = text[self.where_value_offset:].strip()
     elif GT in text:
       self.operator = GT
       self.operator_offset = text.find(GT)
       self.where_value_offset = self.operator_offset + len(GT)
       self.where_value = text[self.where_value_offset:].strip()
-    elif GTEQ in text:
-      self.operator = GTEQ
-      self.operator_offset = text.find(GTEQ)
-      self.where_value_offset = self.operator_offset + len(GTEQ)
+    elif EQ in text:
+      self.operator = EQ
+      self.operator_offset = text.find(EQ)
+      self.where_value_offset = self.operator_offset + len(EQ)
       self.where_value = text[self.where_value_offset:].strip()
 
     if self.where_mnemonic:
@@ -156,9 +157,9 @@ class SelectExpression(object):
     left = None
     right = None
     try:
-      is_int = True
       left = int(value)
       right = int(self.where_value)
+      is_int = True
       if LT == op:
         result = left < right
       elif LTEQ == op:
@@ -184,10 +185,10 @@ class SelectExpression(object):
     left = None
     right = None
     try:
-      is_float = True 
       result = None
       left = float(value)
       right = float(self.where_value)
+      is_float = True 
       if LT == op:
         result = left < right
       elif LTEQ == op:
